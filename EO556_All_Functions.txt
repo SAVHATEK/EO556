@@ -1,0 +1,120 @@
+
+EO556 Motor Kontrol Kütüphanesi - Fonksiyonlar ve Detaylı Açıklamalar
+---------------------------------------------------------------------
+
+1. Fonksiyon Listesi
+--------------------
+Aşağıda EO556 kütüphanesinde bulunan tüm fonksiyonlar, parametreleri, açıklamaları ve kullanım örnekleri detaylı bir şekilde listelenmiştir.
+
+2. Fonksiyon Açıklamaları
+-------------------------
+
+2.1 Constructor: EO556(int PWM_Pin, int Dir_Pin, int En_Pin, int PWM_Channel)
+    - Yeni bir EO556 motor nesnesi oluşturur.
+    - Parametreler:
+        - `PWM_Pin`: PWM sinyali için kullanılan pin.
+        - `Dir_Pin`: Yön kontrolü için kullanılan pin.
+        - `En_Pin`: Motoru aktif/pasif hale getiren pin.
+        - `PWM_Channel`: PWM kanalı.
+    - Örnek:
+        EO556 motor(5, 6, 7, 0);
+
+2.2 void begin()
+    - Motoru başlatır ve gerekli pin yapılandırmalarını yapar.
+    - Debug modu aktifse "Motor initialized" mesajını seri porta yazdırır.
+    - Örnek:
+        motor.begin();
+
+2.3 void changeDutyCycle(int dutyCycle)
+    - Motorun PWM duty cycle (0-255) değerini ayarlar.
+    - Varsayılan: 128 (%50).
+    - Örnek:
+        motor.changeDutyCycle(200);
+        // Duty cycle 200 olarak ayarlandı.
+    - Debug Çıktısı:
+        "[MotorID] : DUTY CYCLE CHANGED".
+
+2.4 void moveClockwise(int frequency)
+    - Motoru saat yönünde belirtilen frekansta çalıştırır.
+    - Parametre:
+        - `frequency`: Motorun çalışma frekansı (Hz).
+    - Frekans sınırları: 10 - 10.000 Hz.
+    - Örnek:
+        motor.moveClockwise(1500);
+        // Motor saat yönünde 1500 Hz ile döner.
+    - Debug Çıktısı:
+        "MotorID: Motor moving clockwise at 1500 Hz".
+
+2.5 void moveCounterClockwise(int frequency)
+    - Motoru saat yönünün tersinde belirtilen frekansta çalıştırır.
+    - Parametre:
+        - `frequency`: Motorun çalışma frekansı (Hz).
+    - Örnek:
+        motor.moveCounterClockwise(800);
+        // Motor saat yönünün tersinde 800 Hz ile döner.
+    - Debug Çıktısı:
+        "MotorID: Motor moving counter-clockwise at 800 Hz".
+
+2.6 void stop()
+    - Motoru durdurur ve enable pinini serbest bırakır.
+    - Örnek:
+        motor.stop();
+        // Motor durduruldu.
+    - Debug Çıktısı:
+        "MotorID: Motor stopped".
+
+2.7 void changeMaxFrequency(int frequency)
+    - Motor için maksimum çalışma frekansını ayarlar.
+    - Varsayılan: 10.000 Hz.
+    - Örnek:
+        motor.changeMaxFrequency(12000);
+        // Maksimum frekans 12.000 Hz olarak ayarlandı.
+    - Debug Çıktısı:
+        "Max frequency set to 12000 Hz".
+
+2.8 void changeMinFrequency(int frequency)
+    - Motor için minimum çalışma frekansını ayarlar.
+    - Varsayılan: 10 Hz.
+    - Örnek:
+        motor.changeMinFrequency(5);
+        // Minimum frekans 5 Hz olarak ayarlandı.
+    - Debug Çıktısı:
+        "Min frequency set to 5 Hz".
+
+2.9 void openDebug(String motorID)
+    - Debug modunu etkinleştirir ve seri porta işlem bilgilerini yazar.
+    - Parametre:
+        - `motorID`: Motorun kimliği (örneğin, "Motor1").
+    - Örnek:
+        motor.openDebug("Motor1");
+        // Debug modu etkinleştirildi.
+    - Debug Çıktısı:
+        "Debug enabled for Motor1".
+
+2.10 void disableDebug()
+    - Debug modunu devre dışı bırakır.
+    - Örnek:
+        motor.disableDebug();
+        // Debug modu kapatıldı.
+    - Debug Çıktısı:
+        "Debug disabled".
+
+3. Örnek Kullanım
+-----------------
+#include "EO556.h"
+
+EO556 motor(5, 6, 7, 0); // PWM, Yön, Enable pinleri ve PWM kanalı.
+
+void setup() {
+    motor.begin();
+    motor.openDebug("Motor1");       // Debug modu etkinleştirildi.
+    motor.changeDutyCycle(150);     // Duty Cycle değeri 150 olarak ayarlandı.
+    motor.moveClockwise(1200);      // Motor saat yönünde 1200 Hz ile çalışıyor.
+}
+
+void loop() {
+    delay(5000);
+    motor.stop();                   // Motor durduruldu.
+    delay(2000);
+    motor.moveCounterClockwise(800); // Motor saat yönünün tersinde 800 Hz ile çalışıyor.
+}

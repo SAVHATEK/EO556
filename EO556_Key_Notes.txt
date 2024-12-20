@@ -1,0 +1,58 @@
+
+EO556 Motor Kontrol Kütüphanesi - Anahtar Notlar
+-----------------------------------------------
+
+1. Zorunlu Başlatma Adımları
+----------------------------
+- `EO556` sınıfından bir motor nesnesi oluşturun:
+  Örnek: `EO556 motor(PWM_Pin, Dir_Pin, En_Pin, PWM_Channel);`
+- Motoru başlatmak için `motor.begin()` fonksiyonunu çağırın.
+
+2. Varsayılan Değerler
+----------------------
+- PWM Frekansı: 10 Hz
+- Duty Cycle: 128 (%50)
+- Çözünürlük: 8 bit
+- Başlatma Gecikmesi: 100 ms
+- Min Frekans: 10 Hz
+- Max Frekans: 10.000 Hz
+
+Bu değerleri değiştirmek için `change` fonksiyonlarını `begin()` çağrılmadan önce kullanın.
+
+3. Kullanım İpuçları
+--------------------
+- `changeDutyCycle`, `changeMaxFrequency`, ve `changeMinFrequency` gibi ayar fonksiyonları, motorun başlatılmasından önce kullanılmalıdır.
+- `moveClockwise` veya `moveCounterClockwise` fonksiyonları, motoru belirli bir frekansta döndürmek için çağrılır.
+- `stop()` fonksiyonu, motorun hareketini durdurur ancak elektriksel gücü kesmez.
+
+4. Debug Modu
+-------------
+- `openDebug(motorID)` fonksiyonuyla debug modu etkinleştirilir ve işlemler sırasında detaylı seri port çıktıları alınır.
+- `disableDebug()` fonksiyonuyla debug modu devre dışı bırakılır.
+- Debug modu, frekans sınır aşımlarını, pin durumlarını ve motor hareketlerini seri port üzerinden bildirir.
+
+5. Geçersiz Giriş Değerleri
+---------------------------
+- Geçersiz frekans veya duty cycle değerleri kabul edilir ancak beklenmeyen davranışlara neden olabilir. Örneğin:
+  - Duty Cycle > 255 veya < 0.
+  - Frekans < Min Frekans veya > Max Frekans.
+- Hata önleme mekanizmaları bir sonraki güncellemede eklenebilir.
+
+6. Frekans ve Görev Döngüsü Sınırları
+-------------------------------------
+- Görev döngüsü: 0-255
+- Frekans: Min (10 Hz) ile Max (10.000 Hz) arasında.
+
+7. Seri Port Çıktıları
+----------------------
+Debug modu etkinse, aşağıdaki bilgiler seri port üzerinden yazdırılır:
+- Motorun hangi yönde ve hangi frekansta döndüğü.
+- Frekans sınırlarının aşılıp aşılmadığı.
+- Duty cycle değişiklikleri.
+- Motorun durma durumu.
+- Pinlerin geçerli durumu.
+
+8. Hata Ayıklama ve Performans İpuçları
+---------------------------------------
+- Debug modunu etkinleştirerek motorun çalışma durumunu anlık olarak takip edebilirsiniz.
+- Hareket sırasında frekans ve görev döngüsü ayarlarını değiştirmek için ek optimizasyonlar yapılabilir.

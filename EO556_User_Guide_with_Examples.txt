@@ -1,0 +1,134 @@
+
+EO556 Motor Control Library - Detailed User Guide with Examples
+---------------------------------------------------------------
+
+1. Introduction
+---------------
+The EO556 library simplifies motor control with Arduino, offering features like PWM speed control, direction handling, and debugging. It is optimized for ease of use and flexibility in motor applications.
+
+2. Setting Up the Library
+--------------------------
+1. Include `EO556.cpp` and `EO556.h` in your Arduino project.
+2. Add `#include "EO556.h"` to your sketch.
+3. Create an EO556 object:
+   Example: `EO556 motor(PWM_Pin, Dir_Pin, En_Pin, PWM_Channel);`
+   - PWM_Pin: Pin for PWM signal.
+   - Dir_Pin: Pin for direction control.
+   - En_Pin: Pin for enabling/disabling the motor.
+   - PWM_Channel: The PWM channel (must be set).
+
+4. Initialize the motor with `motor.begin()`.
+
+3. Default Values
+-----------------
+The following defaults apply unless changed:
+- PWM Frequency: 10 Hz
+- Duty Cycle: 128 (50%)
+- Resolution: 8 bits
+- Start Delay: 100 ms
+- Min Frequency: 10 Hz
+- Max Frequency: 10,000 Hz
+
+Use `change` functions to customize these before `begin()`.
+
+4. Function Descriptions and Examples
+--------------------------------------
+
+4.1 changeDutyCycle(int dutyCycle)
+    - Adjusts the PWM duty cycle (0-255).
+    - Default: 128 (50%).
+    - Example:
+        motor.changeDutyCycle(200);
+        // Sets the duty cycle to 200.
+    - Debug Output (if enabled):
+        "[MotorID] : DUTY CYCLE CHANGED".
+
+4.2 moveClockwise(int frequency)
+    - Moves the motor clockwise at the specified frequency.
+    - Frequency Range: 10 - 10,000 Hz.
+    - Example:
+        motor.moveClockwise(1500);
+        // Motor rotates clockwise at 1500 Hz.
+    - Debug Output:
+        "Direction pin is LOW",
+        "Frequency is valid",
+        "Motor moving clockwise at 1500 Hz".
+
+4.3 moveCounterClockwise(int frequency)
+    - Moves the motor counter-clockwise at the specified frequency.
+    - Example:
+        motor.moveCounterClockwise(800);
+        // Motor rotates counter-clockwise at 800 Hz.
+    - Debug Output:
+        "Direction pin is HIGH",
+        "Frequency is valid",
+        "Motor moving counter-clockwise at 800 Hz".
+
+4.4 stop()
+    - Stops the motor and releases the enable pin.
+    - Example:
+        motor.stop();
+        // Stops the motor and disengages the enable pin.
+    - Debug Output:
+        "MotorID: Motor stopped".
+
+4.5 changeMaxFrequency(int frequency)
+    - Sets the maximum allowable frequency.
+    - Default: 10,000 Hz.
+    - Example:
+        motor.changeMaxFrequency(12000);
+        // Updates the max frequency to 12,000 Hz.
+    - Debug Output:
+        "Max frequency set to 12000 Hz".
+
+4.6 changeMinFrequency(int frequency)
+    - Sets the minimum allowable frequency.
+    - Default: 10 Hz.
+    - Example:
+        motor.changeMinFrequency(5);
+        // Updates the min frequency to 5 Hz.
+    - Debug Output:
+        "Min frequency set to 5 Hz".
+
+4.7 openDebug(String motorID)
+    - Enables debug mode for detailed logs.
+    - Example:
+        motor.openDebug("Motor1");
+        // Enables debug with ID "Motor1".
+    - Debug Output:
+        "Debug enabled for Motor1".
+
+4.8 disableDebug()
+    - Disables debug mode.
+    - Example:
+        motor.disableDebug();
+        // Debugging disabled.
+    - Debug Output:
+        "Debug disabled".
+
+5. Comprehensive Example
+-------------------------
+#include "EO556.h"
+
+EO556 motor(5, 6, 7, 0); // PWM, Direction, Enable pins, and PWM Channel.
+
+void setup() {
+    motor.begin();
+    motor.openDebug("Motor1");       // Enable debug for detailed logs.
+    motor.changeDutyCycle(150);     // Set duty cycle to 150.
+    motor.moveClockwise(1200);      // Rotate clockwise at 1200 Hz.
+}
+
+void loop() {
+    delay(5000);
+    motor.stop();                   // Stop motor after 5 seconds.
+    delay(2000);
+    motor.moveCounterClockwise(800); // Rotate counter-clockwise at 800 Hz.
+}
+
+6. Notes
+--------
+- Call `change` functions before `begin()` for optimal setup.
+- Invalid values (e.g., duty cycle > 255 or frequency < 10) are accepted without warnings but may cause unexpected behavior.
+- Debug mode provides real-time feedback for troubleshooting.
+

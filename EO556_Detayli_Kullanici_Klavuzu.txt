@@ -1,0 +1,133 @@
+
+EO556 Motor Kontrol Kütüphanesi - Detaylı Kullanım Kılavuzu ve Örnekler
+----------------------------------------------------------------------
+
+1. Giriş
+--------
+EO556 kütüphanesi, Arduino ile motor kontrolünü kolaylaştırmak için geliştirilmiştir. PWM tabanlı hız kontrolü, yön kontrolü ve hata ayıklama (debug) özellikleri ile kullanıcı dostu ve esnek bir yapı sunar.
+
+2. Kütüphane Kurulumu
+----------------------
+1. Projenize `EO556.cpp` ve `EO556.h` dosyalarını ekleyin.
+2. Kütüphaneyi dahil edin: `#include "EO556.h"`.
+3. EO556 sınıfından bir nesne oluşturun:
+   Örnek: `EO556 motor(PWM_Pin, Dir_Pin, En_Pin, PWM_Channel);`
+   - `PWM_Pin`: PWM sinyali için pin.
+   - `Dir_Pin`: Yön kontrolü için pin.
+   - `En_Pin`: Motoru aktif/pasif hale getirmek için pin.
+   - `PWM_Channel`: PWM kanalı (zorunlu, varsayılan değeri yok).
+
+4. Motoru başlatmak için `motor.begin()` fonksiyonunu çağırın.
+
+3. Varsayılan Değerler
+----------------------
+Kütüphane aşağıdaki varsayılan değerlerle başlatılır:
+- PWM Frekansı: 10 Hz
+- Duty Cycle: 128 (%50)
+- Çözünürlük: 8 bit
+- Başlatma Gecikmesi: 100 ms
+- Min Frekans: 10 Hz
+- Max Frekans: 10.000 Hz
+
+Bu değerleri özelleştirmek için `change` fonksiyonlarını `begin()` çağrılmadan önce kullanmanız önerilir.
+
+4. Fonksiyonlar ve Örnekler
+---------------------------
+
+4.1 changeDutyCycle(int dutyCycle)
+    - PWM Duty Cycle (0-255) değerini ayarlar.
+    - Varsayılan: 128 (%50).
+    - Örnek:
+        motor.changeDutyCycle(200);
+        // Duty Cycle değeri 200 olarak ayarlandı.
+    - Debug Çıktısı:
+        "[MotorID] : DUTY CYCLE CHANGED".
+
+4.2 moveClockwise(int frequency)
+    - Motoru saat yönünde belirtilen frekansta çalıştırır.
+    - Frekans Aralığı: 10 - 10.000 Hz.
+    - Örnek:
+        motor.moveClockwise(1500);
+        // Motor 1500 Hz ile saat yönünde döner.
+    - Debug Çıktısı:
+        "Direction pin LOW",
+        "Frequency is valid",
+        "Motor moving clockwise at 1500 Hz".
+
+4.3 moveCounterClockwise(int frequency)
+    - Motoru saat yönünün tersinde belirtilen frekansta çalıştırır.
+    - Örnek:
+        motor.moveCounterClockwise(800);
+        // Motor 800 Hz ile saat yönünün tersinde döner.
+    - Debug Çıktısı:
+        "Direction pin HIGH",
+        "Frequency is valid",
+        "Motor moving counter-clockwise at 800 Hz".
+
+4.4 stop()
+    - Motoru durdurur ve enable pinini serbest bırakır.
+    - Örnek:
+        motor.stop();
+        // Motor durdurulur ve enable pini serbest bırakılır.
+    - Debug Çıktısı:
+        "MotorID: Motor stopped".
+
+4.5 changeMaxFrequency(int frequency)
+    - Maksimum frekansı ayarlar.
+    - Varsayılan: 10.000 Hz.
+    - Örnek:
+        motor.changeMaxFrequency(12000);
+        // Maksimum frekans 12.000 Hz olarak ayarlandı.
+    - Debug Çıktısı:
+        "Max frequency set to 12000 Hz".
+
+4.6 changeMinFrequency(int frequency)
+    - Minimum frekansı ayarlar.
+    - Varsayılan: 10 Hz.
+    - Örnek:
+        motor.changeMinFrequency(5);
+        // Minimum frekans 5 Hz olarak ayarlandı.
+    - Debug Çıktısı:
+        "Min frequency set to 5 Hz".
+
+4.7 openDebug(String motorID)
+    - Debug modunu etkinleştirir ve motor kimliğini belirler.
+    - Örnek:
+        motor.openDebug("Motor1");
+        // Debug modu "Motor1" kimliği ile etkinleştirildi.
+    - Debug Çıktısı:
+        "Debug enabled for Motor1".
+
+4.8 disableDebug()
+    - Debug modunu devre dışı bırakır.
+    - Örnek:
+        motor.disableDebug();
+        // Debug modu devre dışı bırakıldı.
+    - Debug Çıktısı:
+        "Debug disabled".
+
+5. Kapsamlı Örnek
+-----------------
+#include "EO556.h"
+
+EO556 motor(5, 6, 7, 0); // PWM, Yön, Enable pinleri ve PWM kanalı.
+
+void setup() {
+    motor.begin();
+    motor.openDebug("Motor1");       // Debug modunu etkinleştir.
+    motor.changeDutyCycle(150);     // Duty Cycle değeri 150 olarak ayarlandı.
+    motor.moveClockwise(1200);      // Motor 1200 Hz ile saat yönünde döner.
+}
+
+void loop() {
+    delay(5000);
+    motor.stop();                   // Motor durdurulur.
+    delay(2000);
+    motor.moveCounterClockwise(800); // Motor 800 Hz ile saat yönünün tersinde döner.
+}
+
+6. Notlar
+---------
+- `change` fonksiyonlarını `begin()` çağrılmadan önce kullanmak daha verimli bir kurulum sağlar.
+- Geçersiz değerler (ör. duty cycle > 255 veya frekans < 10) kabul edilir ancak öngörülemeyen davranışlara neden olabilir.
+- Debug modu, hata ayıklama ve anlık işlem durumlarını görmek için kullanışlıdır.

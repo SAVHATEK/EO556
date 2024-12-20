@@ -1,0 +1,32 @@
+{
+    "name": "EO556",
+    "version": "1.0.0",
+    "description": "Arduino library for motor control with EO556. Provides PWM-based speed control and directional handling with debugging capabilities.",
+    "keywords": [
+        "motor",
+        "PWM",
+        "direction",
+        "debug",
+        "control"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SAVHATEK/EO556.git"
+    },
+    "authors": [
+        {
+            "name": "CAN BERK ÖRENBOZ",
+            "email": "savhatek@gmail.com",
+            "maintainer": true
+        }
+    ],
+    "frameworks": [
+        "arduino"
+    ],
+    "platforms": [
+        "atmelavr",
+        "espressif8266",
+        "espressif32"
+    ],
+    "dependencies": {}
+}

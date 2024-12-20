@@ -1,0 +1,14 @@
+
+EO556 Motor Kontrol Kütüphanesi - Fonksiyon İsimleri
+----------------------------------------------------
+
+1. EO556(int PWM_Pin, int Dir_Pin, int En_Pin, int PWM_Channel)
+2. void begin()
+3. void changeDutyCycle(int dutyCycle)
+4. void moveClockwise(int frequency)
+5. void moveCounterClockwise(int frequency)
+6. void stop()
+7. void changeMaxFrequency(int frequency)
+8. void changeMinFrequency(int frequency)
+9. void openDebug(String motorID)
+10. void disableDebug()
